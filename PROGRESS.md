@@ -117,12 +117,16 @@ signed out and an agent must not drive a login or create an account. So it needs
 - ✅ **dev.to** — published first try, live and publicly readable with all four tags:
   <https://dev.to/booyaka101/openai-is-deleting-your-stored-prompts-on-november-30-there-is-no-export-api-189p>
   (6,970 characters; tags `openai`, `node`, `javascript`, `devops`)
-- ❌ **X** — not posted. The composer's DraftJS model would not accept synthetic input on the
-  current build: focus lands correctly on `tweetTextarea_0`, `Input.insertText` really does put all
-  296 characters in, but X's own counter (`[role=progressbar] aria-valuenow`) stays at **0** and the
-  Post button stays `aria-disabled="true"`. An 11-character control string failed identically, so it
-  is not a length problem. Three attempts, then stopped per the standing "don't burn attempts on X"
-  rule; the composer was cleared so no draft is left dirty. Logged in `LESSONS.md`.
+- ❌ **X** — not posted, and I am confident it is not postable by an agent on this build. The
+  composer's DraftJS model will not accept synthetic input: text reaches the DOM every time
+  (296/296 characters) but X's own counter (`[role=progressbar] aria-valuenow`) stays at **0** and
+  the Post button stays `aria-disabled="true"`. Five mechanisms tried, all failing identically —
+  `Input.insertText` after a collapsed Range, the same after a real mouse press/release, an
+  11-character control string, a synthetic `ClipboardEvent` carrying a `DataTransfer`, and a real
+  ctrl+V with the text genuinely on the Windows clipboard. It is still DraftJS (markers confirmed),
+  so this is not an editor migration — the controlled component simply never reconciles DOM
+  mutations it did not originate. The composer was cleared; no dirty draft is left. Logged in
+  `LESSONS.md` so no future session re-walks any of those five paths.
 
   Ready-to-paste text (279/280 weighted):
 
