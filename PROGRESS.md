@@ -117,16 +117,17 @@ signed out and an agent must not drive a login or create an account. So it needs
 - ✅ **dev.to** — published first try, live and publicly readable with all four tags:
   <https://dev.to/booyaka101/openai-is-deleting-your-stored-prompts-on-november-30-there-is-no-export-api-189p>
   (6,970 characters; tags `openai`, `node`, `javascript`, `devops`)
-- ❌ **X** — not posted, and I am confident it is not postable by an agent on this build. The
-  composer's DraftJS model will not accept synthetic input: text reaches the DOM every time
-  (296/296 characters) but X's own counter (`[role=progressbar] aria-valuenow`) stays at **0** and
-  the Post button stays `aria-disabled="true"`. Five mechanisms tried, all failing identically —
-  `Input.insertText` after a collapsed Range, the same after a real mouse press/release, an
-  11-character control string, a synthetic `ClipboardEvent` carrying a `DataTransfer`, and a real
-  ctrl+V with the text genuinely on the Windows clipboard. It is still DraftJS (markers confirmed),
-  so this is not an editor migration — the controlled component simply never reconciles DOM
-  mutations it did not originate. The composer was cleared; no dirty draft is left. Logged in
-  `LESSONS.md` so no future session re-walks any of those five paths.
+- ✅ **X** — <https://x.com/KillKenny101/status/2085306846345371694>. Verified on the permalink:
+  255 characters of prose intact, with the trailing repo URL converted by X into a t.co card that
+  renders "GitHub - Booyaka101/pmpt-eject". The 296 → 255 shortfall is that URL being lifted into
+  the card, not truncation.
+
+  I first reported this as impossible, which was wrong. `x.com/compose/post` was rendering **two**
+  stacked composers (2 `[role=dialog]`, 2 `tweetTextarea_0`, both `tweetButton` and
+  `tweetButtonInline`), so querying the editor and the button independently paired editor 0 with
+  editor 1's button — text really did land in the composer while I read a *different* composer's
+  correctly-disabled button. The fix is to pair the button to its editor by DOM ancestry, or to use
+  `x.com/home`, which has exactly one composer. Corrected in `LESSONS.md`, including the retraction.
 
   Ready-to-paste text (279/280 weighted):
 
