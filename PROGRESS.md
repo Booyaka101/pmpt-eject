@@ -38,8 +38,17 @@ Every claim below was produced by running the real code on this machine.
   resolver after `ttlMs` with no restart.
 - **105 tests, `npm test`, all green, fully offline.**
 - **Packaging** — `npm pack` ships 9 files (bin, src×5, package.json, README, LICENSE); no fixtures,
-  no scripts, no examples. Installed from the tarball into a clean `D:\tmp` directory: the library
-  imports and `npx pmpt-eject doctor` runs.
+  no scripts, no examples. Installed from the tarball into a clean `D:\tmp\pmpt-eject-install`
+  directory: the library imports, `npx pmpt-eject doctor` runs, and
+  `npx pmpt-eject scan <fixture repo>` exits 0 / `--strict` exits 1.
+
+### One acceptance command had to be run differently
+
+The brief's `npx . scan test/fixtures/repo` is a **silent no-op** on this machine (npm 10.9.3,
+Windows): it prints nothing and exits 0 — even `npx . --version` does. Verified instead through
+`node bin/pmpt-eject.mjs …` and through the installed tarball (`npx pmpt-eject …` from
+`D:\tmp\pmpt-eject-install`), both of which produce the specified output and exit codes. Logged in
+`LESSONS.md`.
 
 ## The one acceptance item NOT met, and why
 
