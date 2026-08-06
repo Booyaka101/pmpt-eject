@@ -1,0 +1,108 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    # Concrete runner labels, not floating ones — a floating label silently
+    # re-points and takes your baseline with it.
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+        node: ['22', '24']
+    name: test (node ${{ matrix.node }} / ${{ matrix.os }})
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node }}
+      # Zero runtime dependencies: there is nothing to install.
+      - name: node --test
+        run: npm test
+
+  smoke:
+    runs-on: ubuntu-24.04
+    name: end-to-end smoke
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: the worked example prints the documented output
+        run: node examples/expand.mjs
+
+      - name: a prompt edited mid-run reaches the live resolver
+        run: node examples/hotfix.mjs
+
+      - name: doctor
+        run: node bin/pmpt-eject.mjs doctor test/fixtures/repo
+
+      - name: scan reports the seeded ids
+        run: node bin/pmpt-eject.mjs scan test/fixtures/repo
+
+      # Dogfood the CI gate on itself, in both directions.
+      - name: '--strict passes when nothing is stranded'
+        run: node bin/pmpt-eject.mjs scan test/fixtures/repo/src --strict --prompts test/fixtures/prompts
+
+      - name: '--strict fails when something is stranded'
+        run: |
+          if node bin/pmpt-eject.mjs scan test/fixtures/repo --strict; then
+            echo "::error::scan --strict exited 0 with stranded ids — the CI gate is broken"
+            exit 1
+          fi
+          echo "scan --strict correctly exited non-zero"
+
+      - name: capture without Chrome exits 2 with no stack trace
+        run: |
+          set +e
+          out=$(node bin/pmpt-eject.mjs capture --port 9 2>&1)
+          code=$?
+          set -e
+          echo "$out"
+          if [ "$code" != "2" ]; then
+            echo "::error::expected exit 2, got $code"
+            exit 1
+          fi
+          if echo "$out" | grep -qE '^\s+at .+:[0-9]+:[0-9]+'; then
+            echo "::error::a stack trace leaked to the user"
+            exit 1
+          fi
+
+  package:
+    runs-on: ubuntu-24.04
+    name: installs from a clean path
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: pack
+        run: npm pack
+
+      - name: the tarball ships no fixtures or scripts
+        run: |
+          files=$(tar -tzf pmpt-eject-*.tgz | sed 's|^package/||' | sort)
+          echo "$files"
+          if echo "$files" | grep -E '^(test|scripts|examples)/'; then
+            echo "::error::the tarball contains files that must not ship"
+            exit 1
+          fi
+
+      - name: install into an empty directory and run it
+        run: |
+          mkdir -p "$RUNNER_TEMP/clean"
+          cp pmpt-eject-*.tgz "$RUNNER_TEMP/clean/"
+          cd "$RUNNER_TEMP/clean"
+          npm init -y > /dev/null
+          npm install ./pmpt-eject-*.tgz
+          npx pmpt-eject --version
+          npx pmpt-eject doctor .
+          node -e "import('pmpt-eject').then(m => { if (typeof m.createPromptResolver !== 'function') { throw new Error('main export missing') } console.log('library export OK') })"
