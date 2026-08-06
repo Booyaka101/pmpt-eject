@@ -1,0 +1,63 @@
+name: Guards
+
+# Our own tools, run against this repo. If they are worth shipping they are worth
+# depending on ourselves — a guard that never runs on our code is untested.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  # ghas-free-pack uploads SARIF to code scanning and posts a PR comment.
+  security-events: write
+  pull-requests: write
+
+jobs:
+  guards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Locks the runner image's tool versions and diffs them when GitHub bumps
+      # the image — including when a floating label like ubuntu-latest silently
+      # re-points. The baseline in runner-lock.json is committed; without it this
+      # step would re-baseline every run and never diff a thing.
+      - name: Runner image drift
+        uses: Booyaka101/runner-drift@v1
+
+      - name: pnpm v11 CI guard
+        uses: Booyaka101/pnpm11-ci-guard@v1
+        with:
+          mode: warn
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      # This package has zero runtime dependencies today. package-lock.json is
+      # committed precisely so that stays checkable: the day something is added,
+      # these three steps see it.
+      - name: Install-script audit
+        run: npx --yes npm-script-lens@latest audit --path .
+
+      # Version cooldown: npm worms are typically identified within hours, so
+      # refuse to be among the first to install a brand-new version.
+      - name: Dependency cooldown
+        run: npx --yes npm-script-lens@latest audit --path . --cooldown
+
+      # Drift gate: fails if a dependency gains an install script that nobody has
+      # approved. The allowlist is only worth having if it is enforced.
+      - name: Allowlist drift
+        run: npx --yes npm-script-lens@latest sync --path . --check
+
+      # Shell/Dockerfile/Terraform/PHP — the file types GitHub gated behind paid
+      # Advanced Security.
+      - name: Free GHAS-equivalent scan
+        continue-on-error: true
+        uses: Booyaka101/ghas-free-pack@v1
+        with:
+          github-token: ${{ github.token }}

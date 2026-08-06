@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    # Concrete runner labels, not floating ones — a floating label silently
+    # Concrete runner labels, not floating ones - a floating label silently
     # re-points and takes your baseline with it.
     runs-on: ${{ matrix.os }}
     strategy:
@@ -18,8 +18,8 @@ jobs:
         node: ['22', '24']
     name: test (node ${{ matrix.node }} / ${{ matrix.os }})
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node }}
       # Zero runtime dependencies: there is nothing to install.
@@ -30,8 +30,8 @@ jobs:
     runs-on: ubuntu-24.04
     name: end-to-end smoke
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
 
@@ -54,7 +54,7 @@ jobs:
       - name: '--strict fails when something is stranded'
         run: |
           if node bin/pmpt-eject.mjs scan test/fixtures/repo --strict; then
-            echo "::error::scan --strict exited 0 with stranded ids — the CI gate is broken"
+            echo "::error::scan --strict exited 0 with stranded ids - the CI gate is broken"
             exit 1
           fi
           echo "scan --strict correctly exited non-zero"
@@ -79,8 +79,8 @@ jobs:
     runs-on: ubuntu-24.04
     name: installs from a clean path
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
 

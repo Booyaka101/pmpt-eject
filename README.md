@@ -1,5 +1,11 @@
 # pmpt-eject
 
+[![npm](https://img.shields.io/npm/v/pmpt-eject)](https://www.npmjs.com/package/pmpt-eject)
+[![ci](https://github.com/Booyaka101/pmpt-eject/actions/workflows/ci.yml/badge.svg)](https://github.com/Booyaka101/pmpt-eject/actions/workflows/ci.yml)
+[![node](https://img.shields.io/node/v/pmpt-eject)](https://nodejs.org)
+[![dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](https://www.npmjs.com/package/pmpt-eject?activeTab=dependencies)
+[![license](https://img.shields.io/npm/l/pmpt-eject)](LICENSE)
+
 > **OpenAI is deleting your stored prompts on November 30, 2026.**
 > `v1/prompts` shuts down, the prompt content goes with it, and there is **no export API** —
 > the sanctioned migration is copy-and-paste out of the dashboard, by hand, one version at a time.
