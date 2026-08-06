@@ -1,0 +1,47 @@
+{
+  "id": "pmpt_abc",
+  "name": "support-triage",
+  "versions": {
+    "1": {
+      "instructions": "You are a support agent.",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Summarise the ticket."
+        }
+      ],
+      "model": "gpt-5.5-mini",
+      "variables": [],
+      "capturedAt": "2026-08-06T09:12:44.000Z"
+    },
+    "2": {
+      "instructions": "You are a support agent for {{customer_name}}.",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Summarise the ticket."
+        }
+      ],
+      "model": "gpt-5.6-terra",
+      "variables": [
+        "customer_name"
+      ],
+      "capturedAt": "2026-08-06T09:12:44.000Z"
+    },
+    "3": {
+      "instructions": "You are a support agent for {{customer_name}}. Escalate anything about {{issue}}.",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Summarise the ticket for {{customer_name}}."
+        }
+      ],
+      "model": "gpt-5.6-terra",
+      "variables": [
+        "customer_name",
+        "issue"
+      ],
+      "capturedAt": "2026-08-06T09:12:44.000Z"
+    }
+  }
+}

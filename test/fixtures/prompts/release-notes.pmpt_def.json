@@ -1,0 +1,22 @@
+{
+  "id": "pmpt_def",
+  "name": "release-notes",
+  "versions": {
+    "1": {
+      "instructions": "Write terse release notes for {{product}} version {{version}}.",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Here is the changelog:\n{{changelog}}"
+        }
+      ],
+      "model": "gpt-5.6-terra",
+      "variables": [
+        "changelog",
+        "product",
+        "version"
+      ],
+      "capturedAt": "2026-08-06T09:12:44.000Z"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-06T09:12:44.000Z",
+  "prompts": [
+    {
+      "id": "pmpt_def",
+      "name": "release-notes",
+      "file": "release-notes.pmpt_def.json",
+      "latest": "1"
+    },
+    {
+      "id": "pmpt_abc",
+      "name": "support-triage",
+      "file": "support-triage.pmpt_abc.json",
+      "latest": "3"
+    }
+  ]
+}

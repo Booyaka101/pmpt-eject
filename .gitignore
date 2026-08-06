@@ -1,0 +1,26 @@
+node_modules/
+# …except the seeded ones the scan tests assert are skipped
+!test/fixtures/repo/node_modules/
+!test/fixtures/repo/node_modules/**
+!test/fixtures/repo/dist/
+!test/fixtures/repo/dist/**
+*.tgz
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+coverage/
+.nyc_output/
+.env
+.env.*
+.idea/
+.vscode/
+
+# scratch space used while verifying a build; never part of a release
+tmp/
+.tmp/
+
+# a real capture run in the repo root is your own prompt content — keep it out
+# of git unless you mean to commit it (committing it is the whole point of the
+# resolver, so delete this line once you have reviewed what is in there)
+/prompts/

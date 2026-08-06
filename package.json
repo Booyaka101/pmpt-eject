@@ -1,0 +1,52 @@
+{
+  "name": "pmpt-eject",
+  "version": "1.0.0",
+  "description": "Rescue your OpenAI reusable prompt objects before v1/prompts shuts down on 2026-11-30, then keep hot-fixing prompts with no redeploy. Zero dependencies.",
+  "type": "module",
+  "main": "./src/resolve.mjs",
+  "exports": {
+    ".": "./src/resolve.mjs",
+    "./capture": "./src/capture.mjs",
+    "./scan": "./src/scan.mjs",
+    "./cdp": "./src/cdp.mjs",
+    "./deadline": "./src/deadline.mjs",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "pmpt-eject": "./bin/pmpt-eject.mjs"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "keywords": [
+    "openai",
+    "prompts",
+    "deprecation",
+    "migration",
+    "responses-api",
+    "prompt-management"
+  ],
+  "author": "Booyaka101 <cbosch101@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Booyaka101/pmpt-eject.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Booyaka101/pmpt-eject/issues"
+  },
+  "homepage": "https://github.com/Booyaka101/pmpt-eject#readme",
+  "dependencies": {},
+  "publishConfig": {
+    "access": "public"
+  }
+}
