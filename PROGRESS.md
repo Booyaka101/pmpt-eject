@@ -1,7 +1,15 @@
 # PROGRESS — pmpt-eject
 
-**Status: v1.0.0 complete and verified locally. Not published.**
+**Status: v1.0.0 SHIPPED.**
 Last worked: 2026-08-06.
+
+- npm: <https://www.npmjs.com/package/pmpt-eject> — `pmpt-eject@1.0.0`, public, 9 files, 29.0 kB
+- GitHub: <https://github.com/Booyaka101/pmpt-eject> — public, 6 topics, release
+  [v1.0.0](https://github.com/Booyaka101/pmpt-eject/releases/tag/v1.0.0)
+- CI: all 6 jobs green on the first run (node 22/24 × ubuntu-24.04/windows-2022, plus an
+  end-to-end smoke job and a clean-path install job)
+- Verified after publishing: `npm install pmpt-eject` into an empty directory, then
+  `npx pmpt-eject --version` → `1.0.0` and `import('pmpt-eject')` → `createPromptResolver: function`
 
 ## Phase 0 — external resource verification (PASSED)
 
@@ -57,8 +65,9 @@ before publishing". **That cannot be done from this machine.** OpenAI hard-block
 at Cloudflare: `platform.openai.com/prompts`, loaded in the operator's own Chrome over real CDP with
 three cache-busting reloads, returns "Sorry, you have been blocked — You are unable to access
 openai.com" (Cloudflare Ray `a26ca4a9fd720574`), and `chatgpt.com` in the same tab returns "Unable to
-load site… [IP:14.198.160.207]". The whole openai.com estate is closed to this Hong Kong IP.
-Recorded as a dated bullet in `claude-phone/ideas/LESSONS.md`.
+load site… [IP:14.198.160.207]". The block covers OpenAI's product hosts but **not**
+`community.openai.com`, which loads normally from the same tab. Recorded as a dated bullet in
+`claude-phone/ideas/LESSONS.md`.
 
 Everything the dashboard run would exercise *was* exercised, just against a local origin instead of
 `platform.openai.com`: a real Chrome, a real DevTools WebSocket, real `Network.responseReceived` /
@@ -82,15 +91,45 @@ node bin/pmpt-eject.mjs scan . --strict
 If the real payload shape defeats the normaliser, `/tmp/real-session.jsonl` is a complete transcript
 that can be replayed offline with `replayTranscript()` to fix it without another live session.
 
-## Publish checklist (owner-operated — nothing was published)
+## Publish checklist — DONE
 
-1. `gh repo create Booyaka101/pmpt-eject --public --source=. --push`
-2. `gh repo edit --add-topic openai --add-topic prompts --add-topic deprecation --add-topic migration --add-topic responses-api --add-topic prompt-management`
-3. `npm publish` (package name `pmpt-eject` — availability not checked, no network calls to the
-   registry were made beyond installing the local tarball)
-4. Post in the deprecation thread
-   (`community.openai.com/t/…/1382593`) — see the README's Distribution section; IAmJackHarper and
-   wswag described this exact problem there in their own words.
+1. ✅ `gh repo create Booyaka101/pmpt-eject --public --source=. --push`
+2. ✅ `gh repo edit --add-topic` × 6 (openai, prompts, deprecation, migration, responses-api,
+   prompt-management)
+3. ✅ `git tag -a v1.0.0` + `gh release create v1.0.0`
+4. ✅ `npm publish` — the name was unclaimed (registry 404 beforehand), published as `booyaka`
+5. ✅ Re-verified from the public registry after propagation
+
+### Still owner-operated: the primary launch post
+
+The README names the right channel: the deprecation thread itself,
+`community.openai.com/t/…/1382593`, where IAmJackHarper and wswag described this exact problem in
+their own words. **That host is reachable from this machine** (unlike `platform.openai.com` — it is a
+separate Discourse install and is not behind the Cloudflare block), but the browser session is
+signed out and an agent must not drive a login or create an account. So it needs one owner tap:
+
+> Log in at community.openai.com, open thread 1382593, and reply. Lead with the resolver — the
+> hot-fix-without-redeploy half is what they said they were losing — and mention `capture` as how
+> you get your content out first.
+
+### Launch posts
+
+- ✅ **dev.to** — published first try, live and publicly readable with all four tags:
+  <https://dev.to/booyaka101/openai-is-deleting-your-stored-prompts-on-november-30-there-is-no-export-api-189p>
+  (6,970 characters; tags `openai`, `node`, `javascript`, `devops`)
+- ❌ **X** — not posted. The composer's DraftJS model would not accept synthetic input on the
+  current build: focus lands correctly on `tweetTextarea_0`, `Input.insertText` really does put all
+  296 characters in, but X's own counter (`[role=progressbar] aria-valuenow`) stays at **0** and the
+  Post button stays `aria-disabled="true"`. An 11-character control string failed identically, so it
+  is not a length problem. Three attempts, then stopped per the standing "don't burn attempts on X"
+  rule; the composer was cleared so no draft is left dirty. Logged in `LESSONS.md`.
+
+  Ready-to-paste text (279/280 weighted):
+
+  > OpenAI deletes v1/prompts on Nov 30 and there is no export API - they were never readable with an
+  > API key, and the request for a list endpoint was closed unbuilt. pmpt-eject pulls them out of
+  > your logged-in Chrome, keeps them hot-fixable with no redeploy.
+  > https://github.com/Booyaka101/pmpt-eject
 
 ## Repo map
 
