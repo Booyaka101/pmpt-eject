@@ -372,17 +372,6 @@ node examples/hotfix.mjs   # a prompt edited mid-run, reaching a live process
 
 ---
 
-## Distribution
-
-The single best first step: **reply in
-[the deprecation thread itself](https://community.openai.com/t/deprecation-notice-prompt-objects-in-the-api-will-be-shut-down-on-november-30th-2026/1382593)**,
-where IAmJackHarper and wswag have already described this exact problem in their own words, and
-where everyone still searching "prompt objects shutdown" lands. Lead with the resolver — the
-hot-fix-without-redeploy half is what they said they were losing — and mention `capture` as how you
-get your content out first.
-
----
-
 ## License
 
 MIT © Booyaka101
