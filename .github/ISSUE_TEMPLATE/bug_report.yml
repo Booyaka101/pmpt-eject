@@ -1,0 +1,50 @@
+name: Bug report
+description: Something didn't work the way it should
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Please **never paste API keys or prompt content you cannot share** — check any command output you copy in here first.
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you ran, and what came back.
+      placeholder: |
+        $ npx pmpt-eject doctor
+        Error: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: pmpt-eject version
+      description: Output of `npx pmpt-eject --version`
+    validations:
+      required: true
+
+  - type: input
+    id: runtime
+    attributes:
+      label: Node version and OS
+      description: Output of `node --version`, plus your OS.
+      placeholder: v22.18.0 on macOS 15
+    validations:
+      required: true
+
+  - type: textarea
+    id: doctor
+    attributes:
+      label: "`npx pmpt-eject doctor` output"
+      description: It reports what it can see of your setup, which is usually enough to place the fault without a full repro.
+      render: shell
